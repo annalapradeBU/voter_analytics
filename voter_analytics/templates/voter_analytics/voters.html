@@ -1,0 +1,107 @@
+<!-- File: voters.html -->
+<!--  Author: Anna LaPrade (alaprade@bu.edu), 10/28/2025 -->
+<!-- Description: the html template to display the list of voters for the voter_analytics app -->
+
+{% extends 'voter_analytics/base.html' %}
+
+<!-- extend from the base template -->
+{% block content %}
+
+<div class="wrapper">
+    <div class="container">
+        <h1>Voter List</h1>
+
+        <!-- graphs button -->
+        <a href="{% url 'graphs' %}" class="button">📊 View Graphs</a>
+
+        <!-- filter form start -->
+        <form method="get" class="site-form">
+            <fieldset>
+                <legend>Filter Voters</legend>
+
+                <div>
+                    <label>Party:</label>
+                    {{ filter_form.party_affiliation }}
+                </div>
+
+                <div>
+                    <label>Min Year of Birth:</label>
+                    {{ filter_form.min_dob }}
+                    <label>Max Year of Birth:</label>
+                    {{ filter_form.max_dob }}
+                </div>
+
+                <div>
+                    <label>Voter Score:</label>
+                    {{ filter_form.voter_score }}
+                </div>
+
+                <div>
+                    <label>Voted in Elections:</label><br>
+                    {{ filter_form.v20state }} {{ filter_form.v20state.label_tag }}<br>
+                    {{ filter_form.v21town }} {{ filter_form.v21town.label_tag }}<br>
+                    {{ filter_form.v21primary }} {{ filter_form.v21primary.label_tag }}<br>
+                    {{ filter_form.v22general }} {{ filter_form.v22general.label_tag }}<br>
+                    {{ filter_form.v23town }} {{ filter_form.v23town.label_tag }}
+                </div>
+
+                <button type="submit" class="button">Filter</button>
+            </fieldset>
+        </form>
+        
+
+        <!--pPagination -->
+        {% if is_paginated %}
+            <div class="pagination">
+                <!-- does it have a previous page? show that button (save query params accross )-->
+                {% if page_obj.has_previous %}
+                    <a href="?page={{ page_obj.previous_page_number }}&{{query_params}}">⬅️ Previous</a>
+                {% endif %}
+                <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+                <!-- does it have a next page? show that button (save query params accross )-->
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}&{{query_params}}">Next ➡️</a>
+                {% endif %}
+            </div>
+        {% endif %}
+
+        <!-- voter table -->
+        <div class="mc-table">
+            <div class="mc-table-head">
+                <div class="detail">First Name</div>
+                <div class="detail">Last Name</div>
+                <div class="detail">Street Address</div>
+                <div class="detail">DOB</div>
+                <div class="detail">Party Affiliation</div>
+                <div class="detail">Voter Score</div>
+            </div>
+
+            <!-- iterate through every voter to show their info -->
+            {% for v in voters %}
+            <div class="mc-table-row" onclick="location.href='{% url 'voter_detail' v.pk %}'" style="cursor:pointer;">
+                <div class="detail">{{ v.first_name }}</div>
+                <div class="detail">{{ v.last_name }}</div>
+                <div class="detail">{{ v.street_number }} {{ v.street_name }}</div>
+                <div class="detail">{{ v.date_of_birth }}</div>
+                <div class="detail">{{ v.party_affiliation }}</div>
+                <div class="detail">{{ v.voter_score }}</div>
+            </div>
+            {% endfor %}
+        </div>
+
+         <!-- pagination, but again -->
+         {% if is_paginated %}
+            <div class="pagination">
+                {% if page_obj.has_previous %}
+                    <a href="?page={{ page_obj.previous_page_number }}">⬅️ Previous</a>
+                {% endif %}
+                <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}">Next ➡️</a>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

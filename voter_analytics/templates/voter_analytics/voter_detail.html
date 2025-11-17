@@ -1,0 +1,64 @@
+<!-- File: voter_detail.html -->
+<!--  Author: Anna LaPrade (alaprade@bu.edu), 10/28/2025 -->
+<!-- Description: the html template to display individual voter information for the voter_analytics app -->
+
+<!-- extend from the base template -->
+{% extends 'voter_analytics/base.html' %}
+
+{% block content %}
+
+<div class="wrapper">
+    <div class="container">
+        <h1>Voter Details</h1>
+
+        <table class="mc-table">
+            <!-- identification -->
+            <tr class="mc-table-head"><th>Voter ID</th><td>{{ v.voter_id_number }}</td></tr>
+            <tr class="mc-table-row"><th>First Name</th><td>{{ v.first_name }}</td></tr>
+            <tr class="mc-table-row"><th>Last Name</th><td>{{ v.last_name }}</td></tr>
+
+            <!-- address -->
+            <tr class="mc-table-row"><th>Street Number</th><td>{{ v.street_number }}</td></tr>
+            <tr class="mc-table-row"><th>Street Name</th><td>{{ v.street_name }}</td></tr>
+            <tr class="mc-table-row"><th>Apartment Number</th><td>{{ v.apartment_number|default:"N/A" }}</td></tr>
+            <tr class="mc-table-row"><th>Zip Code</th><td>{{ v.zip_code }}</td></tr>
+
+            <!-- google Maps button -->
+            <tr class="mc-table-row">
+                <th>Map</th>
+                <td>
+                    <a 
+                        href="https://www.google.com/maps/search/?api=1&query={{ v.street_number|urlencode }}+{{ v.street_name|urlencode }}+{{ v.zip_code|urlencode }}" 
+                        target="_blank" 
+                        class="button"
+                    >
+                        🗺️ View on Google Maps
+                    </a>
+                </td>
+            </tr>
+
+            <!-- birth & registration -->
+            <tr class="mc-table-row"><th>Date of Birth</th><td>{{ v.date_of_birth }}</td></tr>
+            <tr class="mc-table-row"><th>Date of Registration</th><td>{{ v.date_of_registration }}</td></tr>
+
+            <!-- political info -->
+            <tr class="mc-table-row"><th>Party Affiliation</th><td>{{ v.party_affiliation }}</td></tr>
+            <tr class="mc-table-row"><th>Precinct Number</th><td>{{ v.precinct_number }}</td></tr>
+
+            <!-- election participation -->
+            <tr class="mc-table-row"><th>Voted 2020 State</th><td>{{ v.v20state|yesno:"Yes,No" }}</td></tr>
+            <tr class="mc-table-row"><th>Voted 2021 Town</th><td>{{ v.v21town|yesno:"Yes,No" }}</td></tr>
+            <tr class="mc-table-row"><th>Voted 2021 Primary</th><td>{{ v.v21primary|yesno:"Yes,No" }}</td></tr>
+            <tr class="mc-table-row"><th>Voted 2022 General</th><td>{{ v.v22general|yesno:"Yes,No" }}</td></tr>
+            <tr class="mc-table-row"><th>Voted 2023 Town</th><td>{{ v.v23town|yesno:"Yes,No" }}</td></tr>
+
+            <!-- voter score -->
+            <tr class="mc-table-row"><th>Voter Score</th><td>{{ v.voter_score }}</td></tr>
+        </table>
+
+        <!-- naviagtion back to voter list-->
+        <a href="{% url 'voters_list' %}" class="button">⬅️ Back to Voter List</a>
+    </div>
+</div>
+
+{% endblock %}

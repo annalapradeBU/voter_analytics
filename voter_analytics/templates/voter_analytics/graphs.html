@@ -1,0 +1,62 @@
+<!-- File: graphs.html -->
+<!--  Author: Anna LaPrade (alaprade@bu.edu), 10/29/2025 -->
+<!-- Description: the html template to display analytics graphs for the voter_analytics app -->
+
+
+<!-- extend from the base template -->
+{% extends 'voter_analytics/base.html' %}
+{% block content %}
+
+<div class="wrapper">
+    <h1>Voter Graphs</h1>
+
+    <!-- navigation back to home/list of voters -->
+    <a href="{% url 'voters_list' %}" class="button">⬅️ Back to Voter List</a>
+
+    <!-- display the form from forms.py -->
+    <form method="get" class="site-form">
+        <fieldset>
+            <legend>Filter Voters</legend>
+
+            <!-- dropdown options -->
+            <div>
+                <label>Party:</label>
+                {{ filter_form.party_affiliation }}
+            </div>
+
+            <div>
+                <label>Min Year of Birth:</label>
+                {{ filter_form.min_dob }}
+                <label>Max Year of Birth:</label>
+                {{ filter_form.max_dob }}
+            </div>
+
+            <div>
+                <label>Voter Score:</label>
+                {{ filter_form.voter_score }}
+            </div>
+
+            <!-- checklist options -->
+            <div>
+                <label>Voted in Elections:</label><br>
+                {{ filter_form.v20state }} {{ filter_form.v20state.label_tag }}<br>
+                {{ filter_form.v21town }} {{ filter_form.v21town.label_tag }}<br>
+                {{ filter_form.v21primary }} {{ filter_form.v21primary.label_tag }}<br>
+                {{ filter_form.v22general }} {{ filter_form.v22general.label_tag }}<br>
+                {{ filter_form.v23town }} {{ filter_form.v23town.label_tag }}
+            </div>
+
+            <button type="submit" class="button">Filter</button>
+        </fieldset>
+    </form>
+
+    <hr>
+
+    <!-- display graphs -->
+    <div>{{ birth_graph|safe }}</div>
+    <div>{{ party_graph|safe }}</div>
+    <div>{{ participation_graph|safe }}</div>
+
+</div>
+
+{% endblock %}
